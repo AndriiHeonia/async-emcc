@@ -26,7 +26,7 @@ Callback *cb;
 class App {
   public:
     void run() {
-      auto cb = new Callback();
+      cb = new Callback();
       val::global("window").call<void>("sendRequest", cb);      
     }
 };

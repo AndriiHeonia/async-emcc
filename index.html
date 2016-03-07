@@ -13,19 +13,23 @@
     window.onload = function() {
 
       // we call this function from C++ code
-      window.sendRequest = function(callback) {
+      window.sendRequest = function(callback, cb) {
         console.log('call callback synchronously');
-        callback["sayHi"]();
+        Module.dynCall_vi(callback, cb);
   
         setTimeout(function() {
           console.log('call callback asynchronously');
-          callback["sayHi"]();
+          Module.dynCall_vi(callback, cb);
         }, 100);
+      };
+      
+      var requestManager = {
+        sendRequest: window.sendRequest
       };
 
       // init and run app
       var app = new Module['App']();
-      app['run']();
+      app['run'](requestManager);
 
     };
   </script>

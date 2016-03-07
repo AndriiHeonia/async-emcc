@@ -3,7 +3,6 @@
 
 using namespace emscripten;
 
-
 // Callback class (instance of ths class should be called from js)
 class Callback {
   public:
@@ -17,10 +16,8 @@ EMSCRIPTEN_BINDINGS(Callback)
       .function("sayHi", &Callback::sayHi);
 }
 
-
 // global raw pointer to the callback instance
 Callback *cb;
-
 
 // App class (entry point)
 class App {

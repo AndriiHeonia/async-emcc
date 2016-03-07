@@ -1,0 +1,33 @@
+<html>
+<head>
+  <title>Emcc async call demo</title>
+  <script type="text/javascript">
+    Module = {
+      noExitRuntime: true
+    };
+  </script>
+  <script type="text/javascript" src="out.js"></script>
+</head>
+<body>
+  <script>
+    window.onload = function() {
+
+      // we call this function from C++ code
+      window.sendRequest = function(callback) {
+        console.log('call callback synchronously');
+        callback["sayHi"]();
+  
+        setTimeout(function() {
+          console.log('call callback asynchronously');
+          callback["sayHi"]();
+        }, 100);
+      };
+
+      // init and run app
+      var app = new Module['App']();
+      app['run']();
+
+    };
+  </script>
+</body>
+</html>

@@ -40,6 +40,7 @@ class App
     {
       EM_ASM_ARGS({
         Module.dynCall_vii($0, $1, $2); // sendRequest($1, $2);
+        Runtime.removeFunction($0);
       }, m_ptrToSendRequest, &App::callbackWrapFunc, m_cb);
     }
   private:

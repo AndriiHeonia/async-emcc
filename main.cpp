@@ -4,12 +4,15 @@
 using namespace emscripten;
 
 // Callback class (instance of ths class should be called from js)
-class Callback {
+class Callback
+{
   public:
-    ~Callback () {
+    ~Callback()
+    {
       printf("Callback dies! \n");
     };
-    void sayHi () {
+    void sayHi()
+    {
       printf("Hello, I'm callback! \n");
     };
 };

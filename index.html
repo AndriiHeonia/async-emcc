@@ -14,13 +14,13 @@
 
       var requestManager = {
         // we call this function from C++ code     
-        sendRequest: function(callback, cb) {
+        sendRequest: function(ptrToCallbackCaller, ptrToCallbackObj) {
           console.log('call callback synchronously');
-          Module.dynCall_vi(callback, cb);
+          Module.dynCall_vi(ptrToCallbackCaller, ptrToCallbackObj);
 
           setTimeout(function() {
             console.log('call callback asynchronously');
-            Module.dynCall_vi(callback, cb);
+            Module.dynCall_vi(ptrToCallbackCaller, ptrToCallbackObj);
           }, 100);
         }
       };

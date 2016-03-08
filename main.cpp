@@ -3,7 +3,7 @@
 
 using namespace emscripten;
 
-// Callback class (instance of ths class should be called from js)
+// Callback class (instance of ths class should be called from js asynchronously)
 class Callback
 {
   public:
@@ -26,22 +26,21 @@ EMSCRIPTEN_BINDINGS(Callback)
 class App
 {
   public:
-    App()
+    App(val ptrToSendRequest)
     {
       m_cb = new Callback();
+      m_ptrToSendRequest = ptrToSendRequest.as<int>();
     }
     ~App()
     {
       printf("App dies! \n");
       delete m_cb;
     }
-    void run(val requestManager)
+    void run()
     {
       EM_ASM_ARGS({
-        // TODO: how to not use global sendRequest? I'd like to do something like this:
-        // requestManager.sendRequest($0, $1);
-        sendRequest($0, $1);
-      }, &App::callbackWrapFunc, m_cb);
+        Module.dynCall_vii($0, $1, $2); // sendRequest($1, $2);
+      }, m_ptrToSendRequest, &App::callbackWrapFunc, m_cb);
     }
   private:
     Callback *m_cb;
@@ -49,10 +48,12 @@ class App
     {
       cb->sayHi();
     }
+
+    int m_ptrToSendRequest;
 };
 EMSCRIPTEN_BINDINGS(App)
 {
     class_<App>("App")
-      .constructor<>()
+      .constructor<val>()
       .function("run", &App::run);
 }

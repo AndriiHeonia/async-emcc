@@ -12,24 +12,24 @@
   <script>
     window.onload = function() {
 
-      // we call this function from C++ code
-      window.sendRequest = function(callback, cb) {
-        console.log('call callback synchronously');
-        Module.dynCall_vi(callback, cb);
-  
-        setTimeout(function() {
-          console.log('call callback asynchronously');
-          Module.dynCall_vi(callback, cb);
-        }, 100);
-      };
-      
       var requestManager = {
-        sendRequest: window.sendRequest
+        // we call this function from C++ code     
+        sendRequest: function(callback, cb) {
+          console.log('call callback synchronously');
+          Module.dynCall_vi(callback, cb);
+
+          setTimeout(function() {
+            console.log('call callback asynchronously');
+            Module.dynCall_vi(callback, cb);
+          }, 100);
+        }
       };
 
+      var ptrToSendRequest = Runtime.addFunction(requestManager.sendRequest);
+
       // init and run app
-      var app = new Module['App']();
-      app['run'](requestManager);
+      var app = new Module['App'](ptrToSendRequest);
+      app['run']();
 
     };
   </script>

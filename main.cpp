@@ -19,19 +19,32 @@ EMSCRIPTEN_BINDINGS(Callback)
       .function("sayHi", &Callback::sayHi);
 }
 
-//Callback *cb = new Callback(); // global raw pointer to the callback
-Callback cb = Callback(); // global callback
+Callback *cb = new Callback(); // global raw pointer to the callback
+//Callback cb = Callback(); // global callback
 
 // App class (entry point)
-class App {
+class App
+{
   public:
-    void run() {
-      val::global("window").call<void>("sendRequest", cb);      
+    App(const val& requestManager) :
+      m_requestManager(requestManager)
+    {
     }
+    ~App()
+    {
+      printf("App dies! \n");
+    }
+    void run()
+    {
+      m_requestManager.call<void>("sendRequest", cb);
+    }
+
+  private:
+    val m_requestManager;
 };
 EMSCRIPTEN_BINDINGS(App)
 {
     class_<App>("App")
-      .constructor<>()
+      .constructor<val>()
       .function("run", &App::run);
 }

@@ -13,18 +13,21 @@
     window.onload = function() {
 
       // we call this function from C++ code
-      window.sendRequest = function(callback) {
-        console.log('call callback synchronously');
-        callback["sayHi"]();
-  
-        setTimeout(function() {
-          console.log('call callback asynchronously');
+      var requestManager = {
+        sendRequest: function(callback) {
+          console.log('call callback synchronously');
           callback["sayHi"]();
-        }, 100);
+
+          setTimeout(function() {
+            console.log('call callback asynchronously');
+            // TODO: how to keep callback alive?
+            callback["sayHi"]();
+          }, 100);
+        }
       };
 
       // init and run app
-      var app = new Module['App']();
+      var app = new Module['App'](requestManager);
       app['run']();
 
     };

@@ -13,7 +13,8 @@
     window.onload = function() {
 
       var requestManager = {
-        // we call this function from C++ code     
+        // we call this function from C++ code
+        // TODO: sendRequest signature is ugly. It must be function(callback)
         sendRequest: function(ptrToCallbackCaller, ptrToCallbackObj) {
           console.log('call callback synchronously');
           Module.dynCall_vi(ptrToCallbackCaller, ptrToCallbackObj);
